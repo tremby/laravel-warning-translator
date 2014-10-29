@@ -1,6 +1,8 @@
 <?php namespace Tremby\WarningTranslator;
 
 use Illuminate\Translation\Translator;
+use Tremby\WarningTranslator\Exception\TranslationNotFoundException;
+use Tremby\WarningTranslator\Exception\TranslationFellBackException;
 
 class WarningTranslator extends Translator {
 
@@ -32,19 +34,12 @@ class WarningTranslator extends Translator {
 
 		if ($line === null) {
 			// Not found
-			\Log::error(
-				"No translation found in any locale for key '$key'; "
-				. "rendering the key instead "
-				. "(tried " . implode(", ", $tried) . ")"
-			);
+			\Log::error(new TranslationNotFoundException($key, $tried));
 			return $key;
 		}
 
 		if (count($tried)) {
-			\Log::warning(
-				"Fell back to $locale locale for translation key '$key' "
-				. "(tried " . implode(", ", $tried) . ")"
-			);
+			\Log::warning(new TranslationFellBackException($locale, $key, $tried));
 		}
 
 		return $line;
