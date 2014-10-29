@@ -1,0 +1,19 @@
+{
+	"name": "tremby/laravel-warning-translator",
+	"description": "A drop-in replacement for the Laravel translator which emits warnings and errors when translations had to fall back or were not found",
+	"require": {
+		"laravel/framework": "~4.1"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Bart Nagel",
+			"email": "bart@tremby.net"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Tremby\\WarningTranslator\\": "src/"
+		}
+	}
+}
