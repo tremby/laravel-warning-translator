@@ -9,6 +9,9 @@ one. The only differences are these:
 - An error (`Log::error`) is logged whenever the translation is not found in any 
   locale.
 
+As an exception, any translation key beginning with `validation.custom.` will 
+not trigger errors.
+
 These logs will be handled however your log messages are normally logged -- 
 whether appearing in the debug bar, logging to a file or going up to a cloud 
 logging service.

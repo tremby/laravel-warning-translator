@@ -17,6 +17,9 @@ class WarningTranslator extends Translator {
 	public function get($key, array $replace = array(), $locale = null) {
 		list($namespace, $group, $item) = $this->parseKey($key);
 
+		// Don't log issues if looking for custom validation messages
+		$ignore = strpos($key, 'validation.custom.') === 0;
+
 		$locales = $this->parseLocale($locale);
 		$tried = array();
 		foreach ($locales as $locale) {
@@ -32,19 +35,23 @@ class WarningTranslator extends Translator {
 
 		if ($line === null) {
 			// Not found
-			\Log::error(
-				"No translation found in any locale for key '$key'; "
-				. "rendering the key instead "
-				. "(tried " . implode(", ", $tried) . ")"
-			);
+			if (!$ignore) {
+				\Log::error(
+					"No translation found in any locale for key '$key'; "
+					. "rendering the key instead "
+					. "(tried " . implode(", ", $tried) . ")"
+				);
+			}
 			return $key;
 		}
 
 		if (count($tried)) {
-			\Log::warning(
-				"Fell back to $locale locale for translation key '$key' "
-				. "(tried " . implode(", ", $tried) . ")"
-			);
+			if (!$ignore) {
+				\Log::warning(
+					"Fell back to $locale locale for translation key '$key' "
+					. "(tried " . implode(", ", $tried) . ")"
+				);
+			}
 		}
 
 		return $line;
